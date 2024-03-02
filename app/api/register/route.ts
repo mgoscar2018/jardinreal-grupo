@@ -3,13 +3,13 @@ import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
 
 export async function POST(
-    request: Request
+    request: Request,
 ) {
     const body = await request.json();
     const {
         email,
         name,
-        password
+        password,
     } = body;
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -18,7 +18,7 @@ export async function POST(
         data: {
             email,
             name,
-            hashedPassword
+            hashedPassword,
         }
     });
 
