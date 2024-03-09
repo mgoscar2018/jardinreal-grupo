@@ -32,14 +32,14 @@ export const categories = [
     description: '¡Esta propiedad es un molino de viento!',
   },
   {
-    label: 'Moderna',
+    label: 'Modernas',
     icon: MdOutlineVilla,
     description: '¡Esta propiedad es moderna!'
   },
   {
-    label: 'Countryside',
+    label: 'Casas de campo',
     icon: TbMountain,
-    description: 'This property is in the countryside!'
+    description: '¡Esta propiedad está en el campo!'
   },
   {
     label: 'Albercas',
@@ -67,34 +67,34 @@ export const categories = [
     description: '¡Esta propiedad es un castillo!'
   },
   {
-    label: 'Caves',
+    label: 'Cuevas',
     icon: GiCaveEntrance,
-    description: 'This property is in a spooky cave!'
+    description: '¡Esta propiedad está en una caverna!'
   },
   {
     label: 'Camping',
     icon: GiForestCamp,
-    description: 'This property offers camping activities!'
+    description: '¡Esta propiedad ofrece actividades para acampar!'
   },
   {
-    label: 'Arctic',
+    label: 'Ártico',
     icon: BsSnow,
-    description: 'This property is in arctic environment!'
+    description: '¡Esta propiedad está en un entorno ártico!'
   },
   {
-    label: 'Desert',
+    label: 'Desierto',
     icon: GiCactus,
-    description: 'This property is in the desert!'
+    description: '¡Esta propiedad está en un entorno desértico!'
   },
   {
-    label: 'Barns',
+    label: 'Graneros',
     icon: GiBarn,
-    description: 'This property is in a barn!'
+    description: '¡Esta propiedad es un granero!'
   },
   {
-    label: 'Lux',
+    label: 'Lujosas',
     icon: IoDiamond,
-    description: 'This property is brand new and luxurious!'
+    description: '¡Esta propiedad es nueva y lujosa!'
   }  
 ]
 
