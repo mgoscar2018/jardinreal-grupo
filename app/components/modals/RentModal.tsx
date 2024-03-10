@@ -8,17 +8,17 @@ import {
   SubmitHandler, 
   useForm
 } from 'react-hook-form';
-/*
+
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/navigation';
-*/
+//import { useRouter } from 'next/navigation';
+
 import { useMemo, useState } from "react";
 import useRentModal from '@/app/hooks/useRentModal';
 import Modal from "./Modal";
 
 //import Counter from "../inputs/Counter";
 import CategoryInput from '../inputs/CategoryInput';
-//import CountrySelect from "../inputs/CountrySelect";
+import CountrySelect from "../inputs/CountrySelect";
 import { categories } from '../navbar/Categories';
 /*
 import ImageUpload from '../inputs/ImageUpload';
@@ -65,19 +65,19 @@ const RentModal = () => {
     }
   });
 
-  //const location = watch('location');
+  const location = watch('location');
   const category = watch('category');
   /*
   const guestCount = watch('guestCount');
   const roomCount = watch('roomCount');
   const bathroomCount = watch('bathroomCount');
   const imageSrc = watch('imageSrc');
-
+*/
   const Map = useMemo(() => dynamic(() => import('../Map'), { 
     ssr: false 
   }), [location]);
 
-*/
+
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
       shouldDirty: true,
@@ -163,23 +163,23 @@ const RentModal = () => {
       </div>
     </div>
   )
-/*
+
   if (step === STEPS.LOCATION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Where is your place located?"
-          subtitle="Help guests find you!"
+          title="¿Dónde está ubicada tú casa?"
+          subtitle="¡Ayuda a los huéspedes a ubicarla!"
         />
         <CountrySelect 
           value={location} 
           onChange={(value) => setCustomValue('location', value)} 
-        />
-        <Map center={location?.latlng} />
+        />        
+        <Map center={location?.latlng} />        
       </div>
     );
   }
-
+/*
   if (step === STEPS.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
@@ -280,7 +280,7 @@ const RentModal = () => {
       //disabled={isLoading}
       isOpen={rentModal.isOpen}
       onClose={rentModal.onClose}
-      onSubmit={rentModal.onClose} //onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onNext} //onSubmit={handleSubmit(onSubmit)}
       title="¡Agrega tú casa!"      
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
