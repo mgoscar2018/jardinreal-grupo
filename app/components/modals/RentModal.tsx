@@ -16,14 +16,13 @@ import { useMemo, useState } from "react";
 import useRentModal from '@/app/hooks/useRentModal';
 import Modal from "./Modal";
 
+import { categories } from '../navbar/Categories';
 import Counter from "../inputs/Counter";
 import CategoryInput from '../inputs/CategoryInput';
 import CountrySelect from "../inputs/CountrySelect";
-import { categories } from '../navbar/Categories';
-/*
 import ImageUpload from '../inputs/ImageUpload';
-import Input from '../inputs/Input';
-*/
+//import Input from '../inputs/Input';
+
 import Heading from '../Heading';
 
 enum STEPS {
@@ -70,7 +69,7 @@ const RentModal = () => {
   const guestCount = watch('guestCount');
   const roomCount = watch('roomCount');
   const bathroomCount = watch('bathroomCount');
-  //const imageSrc = watch('imageSrc');
+  const imageSrc = watch('imageSrc');
 
   const Map = useMemo(() => dynamic(() => import('../Map'), { 
     ssr: false 
@@ -209,13 +208,13 @@ const RentModal = () => {
       </div>
     )
   }
-/*
+
   if (step === STEPS.IMAGES) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Add a photo of your place"
-          subtitle="Show guests what your place looks like!"
+          title="Agrega una foto de tú casa"
+          subtitle="¡Muestra a los huéspedes cómo se ve!"
         />
         <ImageUpload
           onChange={(value) => setCustomValue('imageSrc', value)}
@@ -224,7 +223,7 @@ const RentModal = () => {
       </div>
     )
   }
-
+/*
   if (step === STEPS.DESCRIPTION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
