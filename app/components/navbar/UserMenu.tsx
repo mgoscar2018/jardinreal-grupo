@@ -1,6 +1,7 @@
 'use client';
 
 import { AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import Avatar from "../Avatar";
 import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
@@ -74,7 +75,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                         transition
                     "
                 >
-                    <AiOutlineMenu />  { /* Icono del menú de hamburguesa */ }
+                    {isOpen ? <AiOutlineClose /> : <AiOutlineMenu />} { /* Icono del menú de hamburguesa */ }                      
                     <div className="hidden md:block">
                         <Avatar src={currentUser?.image}/>
                     </div>
@@ -94,8 +95,10 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     right-0
                     top-12
                     text-sm
+                    z-40
                 "
               >  
+              
                 <div className="flex flex-col cursor-pointer">
                     {currentUser ? (
                         <>
