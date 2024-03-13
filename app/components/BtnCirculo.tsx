@@ -20,8 +20,8 @@ const BtnCirculo: React.FC<BtnCirculoProps> = ({
         items-center
         justify-center
         text-neutral-600
-        cursor-pointer
-        hover:opacity-80
+        cursor-pointer        
+        hover:bg-sky-8  00/[.54]
         transition
         bg-white  
     ">

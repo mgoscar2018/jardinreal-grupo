@@ -1,7 +1,7 @@
 'use client';
 
 import { AiOutlineMenu } from "react-icons/ai";
-import { AiOutlineClose } from "react-icons/ai";
+import { FaArrowUpShortWide } from "react-icons/fa6";
 import Avatar from "../Avatar";
 import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
@@ -59,7 +59,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                 </div>
                 <div
                     onClick={toggleOpen}
-                    className="
+                    className={`
                         p-4
                         md:py-1
                         md:px-2
@@ -73,9 +73,10 @@ const UserMenu: React.FC<UserMenuProps> = ({
                         cursor-pointer
                         hover:shadow-md
                         transition
-                    "
-                >
-                    {isOpen ? <AiOutlineClose /> : <AiOutlineMenu />} { /* Icono del menú de hamburguesa */ }                      
+                        ${isOpen ? 'text-red-800' : ''}
+                        `}
+                >                    
+                    {isOpen ? <FaArrowUpShortWide /> : <AiOutlineMenu />} { /* Icono del menú de hamburguesa */ }                      
                     <div className="hidden md:block">
                         <Avatar src={currentUser?.image}/>
                     </div>
