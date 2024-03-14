@@ -1,27 +1,27 @@
 'use client';
 
-// import axios from "axios";
+import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
-// import { toast } from "react-hot-toast";
-// import { Range } from "react-date-range";
-// import { useRouter } from "next/navigation";
-// import { differenceInDays, eachDayOfInterval } from 'date-fns';
+import { toast } from "react-hot-toast";
+import { Range } from "react-date-range";
+import { useRouter } from "next/navigation";
+import { differenceInDays, eachDayOfInterval } from 'date-fns';
 
-// import useLoginModal from "@/app/hooks/useLoginModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 
 import Container from "@/app/components/Container";
 import { categories } from "@/app/components/navbar/Categories";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
-// import ListingReservation from "@/app/components/listings/ListingReservation";
+import ListingReservation from "@/app/components/listings/ListingReservation";
 
-/* const initialDateRange = {
+const initialDateRange = {
   startDate: new Date(),
   endDate: new Date(),
   key: 'selection'
 };
- */
+
 interface ListingClientProps {
   reservations?: SafeReservation[];
   listing: SafeListing & {
@@ -32,9 +32,9 @@ interface ListingClientProps {
 
 const ListingClient : React.FC<ListingClientProps>  = ({
   listing,
-  //reservations = [],
+  reservations = [],
   currentUser
-}) => {/* 
+}) => {
   const loginModal = useLoginModal();
   const router = useRouter();
 
@@ -52,12 +52,12 @@ const ListingClient : React.FC<ListingClientProps>  = ({
 
     return dates;
   }, [reservations]);
-*/
+
   const category = useMemo(() => {
      return categories.find((items) => 
       items.label === listing.category);
   }, [listing.category]);
-/*
+
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
@@ -75,12 +75,13 @@ const ListingClient : React.FC<ListingClientProps>  = ({
         listingId: listing?.id
       })
       .then(() => {
-        toast.success('Listing reserved!');
+        toast.success('¡Hogar reservado!');
         setDateRange(initialDateRange);
-        router.push('/trips');
+        //router.push('/trips');
+        router.refresh();
       })
       .catch(() => {
-        toast.error('Something went wrong.');
+        toast.error('Ocurrió un error.');
       })
       .finally(() => {
         setIsLoading(false);
@@ -109,7 +110,7 @@ const ListingClient : React.FC<ListingClientProps>  = ({
       }
     }
   }, [dateRange, listing.price]);
-*/
+
   return ( 
     <Container>
       <div className="max-w-screen-lg mx-auto">
@@ -121,7 +122,7 @@ const ListingClient : React.FC<ListingClientProps>  = ({
             id={listing.id}
             currentUser={currentUser}
           />
-          {<div 
+          <div 
             className="
               grid 
               grid-cols-1 
@@ -139,7 +140,7 @@ const ListingClient : React.FC<ListingClientProps>  = ({
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
             />
-            {/* <div 
+            <div 
               className="
                 order-first 
                 mb-10 
@@ -156,8 +157,8 @@ const ListingClient : React.FC<ListingClientProps>  = ({
                 disabled={isLoading}
                 disabledDates={disabledDates}
               />
-            </div> */}
-          </div>}
+            </div>
+          </div>
         </div>
       </div>
     </Container>
