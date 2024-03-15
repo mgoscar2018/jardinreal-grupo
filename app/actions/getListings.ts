@@ -1,5 +1,5 @@
 import prisma from "@/app/libs/prismadb";
-/*
+
 export interface IListingsParams {
   userId?: string;
   guestCount?: number;
@@ -10,12 +10,12 @@ export interface IListingsParams {
   locationValue?: string;
   category?: string;
 }
-*/
+
 export default async function getListings(
-//  params: IListingsParams
+  params: IListingsParams
 ) {
   try {
-    /*
+    
     const {
       userId,
       roomCount, 
@@ -77,9 +77,9 @@ export default async function getListings(
         }
       }
     }
-*/
+
     const listings = await prisma.listing.findMany({
-      //where: query,
+      where: query,
       orderBy: {
         createdAt: 'desc'
       }
