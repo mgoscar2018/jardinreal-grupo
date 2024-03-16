@@ -1,4 +1,7 @@
 "use client";
+import React, { useRef, useState } from 'react';
+import useScroll from '@/app/hooks//useScroll'; // Importamos el hook useScroll
+import { toast } from 'react-hot-toast';
 
 import { usePathname, useSearchParams } from "next/navigation";
 import { TbBeach, TbMountain, TbPool } from "react-icons/tb";
@@ -104,6 +107,26 @@ export const categories = [
 ];
 
 const Categories = () => {
+  const barraRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useScroll(barraRef);
+  let [irDerecha,setirDerecha] = useState(true);
+
+  const scrollIzquierda = () => {
+    if (barraRef.current) {
+      barraRef.current.scrollLeft -= 180;
+      setirDerecha(true);
+    }
+  };
+
+  const scrollDerecha = () => {
+    if (barraRef.current) {
+      barraRef.current.scrollLeft += 180;
+      let maxScrollableWidth = barraRef.current.scrollWidth - barraRef.current.clientWidth - 1;
+      if (barraRef.current.scrollLeft > maxScrollableWidth)
+        setirDerecha(false);
+    }
+  };
+
   const params = useSearchParams();
   const category = params?.get("category");
   const pathname = usePathname();
@@ -115,35 +138,82 @@ const Categories = () => {
 
   return (
     //Container = Wrapper
-    <Container>
-      <div className="flex place-content-between gap-4 items-center">
-        <div className="
-          flex
-          relative
-          items-center
-          whitespace-nowrap
-          overflow-hidden
-        ">
-          <div className="flex absolute h-full w-12 items-center bg-gradient-to-r from-white to-transparent">
-            <BtnCirculo icon={SlArrowLeft} />
-          </div>
-            
-          <div className="flex flex-row items-center justify-between">
-            {categories.map((item) => (
-              <CategoryBox
-                key={item.label}
-                label={item.label}
-                icon={item.icon}
-                selected={category === item.label}
-              />
-            ))} 
-          </div>
+    // <Container>
+    //   <div className="flex place-content-between gap-4 items-center">
+    //     <div className="
+    //       flex
+    //       relative
+    //       items-center
+    //       whitespace-nowrap
+    //       overflow-x-auto
+    //     ">
+    //       {/* Botón izquierdo */}
+    //       <div className="flex absolute h-full w-12 items-center bg-gradient-to-r from-white to-transparent">
+    //         <BtnCirculo icon={SlArrowLeft} onClick={scrollIzquierda}/>
+    //       </div> 
+
+    //       {/* Contenedor de iconos */}            
+    //       <div className="flex flex-row items-center justify-between" ref={barraRef}>
+    //         {categories.map((item) => (
+    //           <CategoryBox
+    //             key={item.label}
+    //             label={item.label}
+    //             icon={item.icon}
+    //             selected={category === item.label}
+    //           />
+    //         ))} 
+    //       </div>
           
-          <div className="flex items-center absolute top-0 right-0 w-10 h-full bg-gradient-to-l from-white to-transparent">
-            <BtnCirculo icon={SlArrowRight} />             
+    //       {/* Botón derecho */}
+    //       <div className="flex items-center absolute top-0 right-0 w-10 h-full bg-gradient-to-l from-white to-transparent">
+    //         <BtnCirculo icon={SlArrowRight} onClick={scrollDerecha}/>
+    //       </div>
+          
+    //     </div>
+        
+    //   </div>      
+      
+    // </Container>
+    <Container>
+      <div className="wrapper grid grid-cols-7 gap-4 items-center w-full
+        
+      ">
+        <div className='col-span-6'>
+          <div className="contenedor-iconos 
+            flex
+            relative
+            items-center
+            whitespace-nowrap
+            "
+          >
+            {/* Botón izquierdo */}
+            {isScrolling && barraRef.current && barraRef.current.scrollLeft > 0 && (
+              <div className="boton-izquierdo absolute top-0 left-0 h-full w-12 flex items-center bg-gradient-to-r from-white to-transparent">
+                <BtnCirculo icon={SlArrowLeft} onClick={scrollIzquierda} />
+              </div>
+            )}
+
+            {/* Contenedor de iconos */}
+            <div className="flex items-center scroll-smooth overflow-hidden" ref={barraRef}>
+              {categories.map((item) => (
+                <CategoryBox
+                  key={item.label}
+                  label={item.label}
+                  icon={item.icon}
+                  selected={category === item.label}
+                />
+              ))}
+            </div>
+
+            {/* Botón derecho */}
+            { irDerecha && (
+              <div className="boton-derecho flex items-center absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-white to-transparent">
+                <BtnCirculo icon={SlArrowRight} onClick={scrollDerecha} />
+              </div>
+            )}
           </div>
         </div>
-        <div className="w-40">
+        <div className="col-span-1">
           <Button
             outline
             label="Filtros"
@@ -151,8 +221,7 @@ const Categories = () => {
             onClick={() => {}}
           />          
         </div>
-      </div>      
-      
+      </div>
     </Container>
   );
 };

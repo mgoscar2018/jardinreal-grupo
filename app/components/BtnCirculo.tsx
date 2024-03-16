@@ -1,15 +1,20 @@
 "use client";
+import React from "react";
 import { IconType } from "react-icons";
 
 interface BtnCirculoProps {
     icon: IconType;
+    onClick?: () => void;
 }
 
 const BtnCirculo: React.FC<BtnCirculoProps> = ({
-    icon: Icon
+    icon: Icon,
+    onClick
 }) => {
   return (
-    <div className="
+    <button 
+      onClick={onClick}
+      className="
         w-8
         h-8
         rounded-full
@@ -21,12 +26,13 @@ const BtnCirculo: React.FC<BtnCirculoProps> = ({
         justify-center
         text-neutral-600
         cursor-pointer        
-        hover:bg-sky-8  00/[.54]
+        hover:bg-sky-800/[.54]
         transition
         bg-white  
-    ">
+      "    
+    >
       <Icon />
-    </div>
+    </button>
   );
 };
 
