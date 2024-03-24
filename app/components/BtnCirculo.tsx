@@ -3,9 +3,12 @@ import React from "react";
 import { IconType } from "react-icons";
 
 interface BtnCirculoProps {
-    icon: IconType;
-    onClick?: () => void;
+  icon: IconType;
+  onClick: () => void;
+  className?: string; // Asegúrate de que esta línea esté presente
+  style?: React.CSSProperties; // Añade esta línea para permitir estilos en línea
 }
+
 
 const BtnCirculo: React.FC<BtnCirculoProps> = ({
     icon: Icon,
@@ -14,7 +17,7 @@ const BtnCirculo: React.FC<BtnCirculoProps> = ({
   return (
     <button 
       onClick={onClick}
-      className="
+      className={`
         w-8
         h-8
         rounded-full
@@ -28,8 +31,8 @@ const BtnCirculo: React.FC<BtnCirculoProps> = ({
         cursor-pointer        
         hover:bg-sky-800/[.54]
         transition
-        bg-white  
-      "    
+        bg-white
+      `}      
     >
       <Icon />
     </button>

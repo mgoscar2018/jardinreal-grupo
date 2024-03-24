@@ -1,5 +1,11 @@
 "use client";
-import React, { useRef, useState } from 'react';
+
+import { SlArrowLeft } from "react-icons/sl";
+import { SlArrowRight } from "react-icons/sl";
+
+import BtnCirculo from "../BtnCirculo";
+
+import React, { useRef, useState, useEffect } from 'react';
 import useScroll from '@/app/hooks//useScroll'; // Importamos el hook useScroll
 import { toast } from 'react-hot-toast';
 
@@ -23,10 +29,9 @@ import { MdOutlineVilla } from "react-icons/md";
 import CategoryBox from "../CategoryBox";
 import Container from "../Container";
 
-import { SlArrowLeft } from "react-icons/sl";
-import { SlArrowRight } from "react-icons/sl";
+
 import Button from "../Button";
-import BtnCirculo from "../BtnCirculo";
+
 
 export const categories = [
   {
@@ -109,22 +114,46 @@ export const categories = [
 const Categories = () => {
   const barraRef = useRef<HTMLDivElement>(null);
   const isScrolling = useScroll(barraRef);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
   let [irDerecha,setirDerecha] = useState(true);
 
-  const scrollIzquierda = () => {
-    if (barraRef.current) {
-      barraRef.current.scrollLeft -= 180;
-      setirDerecha(true);
+ 
+
+  const onArrowClick = (direction: 'left' | 'right') => {
+    const { current: barra } = barraRef;
+    if (barra) {
+      const scrollAmount = direction === 'left' ? -180 : 180;
+      barra.scrollLeft += scrollAmount;
+      if (direction === 'left') {
+        setirDerecha(true);
+      } else {
+        let maxScrollableWidth = barra.scrollWidth - barra.clientWidth - 1;
+        if (barra.scrollLeft > maxScrollableWidth)        
+          setirDerecha(false);        
+      }      
     }
   };
+  
+  
+ 
+  const startDragging = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault(); // Evita el comportamiento predeterminado del navegador
+    setIsDragging(true);
+    setStartX(e.pageX - (barraRef.current?.offsetLeft ?? 0));
+    setScrollLeft(barraRef.current?.scrollLeft ?? 0);
+  };
 
-  const scrollDerecha = () => {
-    if (barraRef.current) {
-      barraRef.current.scrollLeft += 180;
-      let maxScrollableWidth = barraRef.current.scrollWidth - barraRef.current.clientWidth - 1;
-      if (barraRef.current.scrollLeft > maxScrollableWidth)
-        setirDerecha(false);
-    }
+  const onDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!isDragging || !barraRef.current) return;
+    const x = e.pageX - (barraRef.current.offsetLeft ?? 0);
+    const walk = (x - startX) * 2; // Increase scroll speed
+    barraRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const stopDragging = () => {
+    setIsDragging(false);
   };
 
   const params = useSearchParams();
@@ -137,43 +166,6 @@ const Categories = () => {
   }
 
   return (
-    //Container = Wrapper
-    // <Container>
-    //   <div className="flex place-content-between gap-4 items-center">
-    //     <div className="
-    //       flex
-    //       relative
-    //       items-center
-    //       whitespace-nowrap
-    //       overflow-x-auto
-    //     ">
-    //       {/* Botón izquierdo */}
-    //       <div className="flex absolute h-full w-12 items-center bg-gradient-to-r from-white to-transparent">
-    //         <BtnCirculo icon={SlArrowLeft} onClick={scrollIzquierda}/>
-    //       </div> 
-
-    //       {/* Contenedor de iconos */}            
-    //       <div className="flex flex-row items-center justify-between" ref={barraRef}>
-    //         {categories.map((item) => (
-    //           <CategoryBox
-    //             key={item.label}
-    //             label={item.label}
-    //             icon={item.icon}
-    //             selected={category === item.label}
-    //           />
-    //         ))} 
-    //       </div>
-          
-    //       {/* Botón derecho */}
-    //       <div className="flex items-center absolute top-0 right-0 w-10 h-full bg-gradient-to-l from-white to-transparent">
-    //         <BtnCirculo icon={SlArrowRight} onClick={scrollDerecha}/>
-    //       </div>
-          
-    //     </div>
-        
-    //   </div>      
-      
-    // </Container>
     <Container>
       <div className="wrapper grid grid-cols-7 gap-4 items-center w-full
         
@@ -189,12 +181,18 @@ const Categories = () => {
             {/* Botón izquierdo */}
             {isScrolling && barraRef.current && barraRef.current.scrollLeft > 0 && (
               <div className="boton-izquierdo absolute top-0 left-0 h-full w-12 flex items-center bg-gradient-to-r from-white to-transparent">
-                <BtnCirculo icon={SlArrowLeft} onClick={scrollIzquierda} />
+                <BtnCirculo icon={SlArrowLeft} onClick={() => onArrowClick('left')} />
               </div>
             )}
 
             {/* Contenedor de iconos */}
-            <div className="flex items-center scroll-smooth overflow-hidden" ref={barraRef}>
+            <div ref={barraRef}
+              className={`flex gap-3 list-none overflow-hidden ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+              onMouseDown={startDragging}
+              onMouseMove={onDrag}
+              onMouseLeave={stopDragging}
+              onMouseUp={stopDragging}
+            >
               {categories.map((item) => (
                 <CategoryBox
                   key={item.label}
@@ -204,11 +202,11 @@ const Categories = () => {
                 />
               ))}
             </div>
-
+            
             {/* Botón derecho */}
-            { irDerecha && (
+            { (barraRef.current && barraRef.current.scrollLeft < (barraRef.current.scrollWidth - barraRef.current.clientWidth - 1) || irDerecha)  && (
               <div className="boton-derecho flex items-center absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-white to-transparent">
-                <BtnCirculo icon={SlArrowRight} onClick={scrollDerecha} />
+                <BtnCirculo icon={SlArrowRight} onClick={() => onArrowClick('right')} />
               </div>
             )}
           </div>
