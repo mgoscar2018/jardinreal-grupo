@@ -7,7 +7,7 @@ import BtnCirculo from "../BtnCirculo";
 
 import React, { useRef, useState, useEffect } from 'react';
 import useScroll from '@/app/hooks//useScroll'; // Importamos el hook useScroll
-import { toast } from 'react-hot-toast';
+//import { toast } from 'react-hot-toast';
 
 import { usePathname, useSearchParams } from "next/navigation";
 import { TbBeach, TbMountain, TbPool } from "react-icons/tb";
@@ -43,7 +43,7 @@ export const categories = [
     label: "Molino de Viento",
     icon: GiWindmill,
     description: "¡Esta propiedad es un molino de viento!",
-  },
+  },  
   {
     label: "Moderna",
     icon: MdOutlineVilla,
@@ -112,31 +112,52 @@ export const categories = [
 ];
 
 const Categories = () => {
-  const barraRef = useRef<HTMLDivElement>(null);
-  const isScrolling = useScroll(barraRef);
+  const barraRef = useRef<HTMLDivElement>(null); 
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  let [irDerecha,setirDerecha] = useState(true);
-
  
 
-  const onArrowClick = (direction: 'left' | 'right') => {
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const updateArrowVisibility = () => {
     const { current: barra } = barraRef;
     if (barra) {
-      const scrollAmount = direction === 'left' ? -180 : 180;
-      barra.scrollLeft += scrollAmount;
-      if (direction === 'left') {
-        setirDerecha(true);
-      } else {
-        let maxScrollableWidth = barra.scrollWidth - barra.clientWidth - 1;
-        if (barra.scrollLeft > maxScrollableWidth)        
-          setirDerecha(false);        
-      }      
+      const maxScrollLeft = barra.scrollWidth - barra.clientWidth - 1;
+      setShowLeftArrow(barra.scrollLeft > 0);
+      setShowRightArrow(barra.scrollLeft < maxScrollLeft);
+      //console.log(barra.scrollLeft, maxScrollLeft);
+      //console.log(showLeftArrow, showRightArrow); 
     }
   };
-  
-  
+
+  const smoothScroll = (distance: number) => {
+    const { current: barra } = barraRef;
+    if (barra) {
+      barra.scrollBy({
+        top: 0,
+        left: distance,
+        behavior: 'smooth'
+      });
+      // Asegúrate de actualizar la visibilidad de las flechas después del desplazamiento
+      setTimeout(updateArrowVisibility, 200); // Ajusta el tiempo si es necesario
+    }
+  };
+
+  // Agrega el evento de escucha para el scroll
+useEffect(() => {
+  const { current: barra } = barraRef;
+  if (barra) {
+    const handleScroll = () => {
+      updateArrowVisibility();
+    };
+    barra.addEventListener('scroll', handleScroll);
+    // Inicializa la visibilidad de las flechas en el montaje
+    updateArrowVisibility();
+    return () => barra.removeEventListener('scroll', handleScroll);
+  }
+}, []);  
  
   const startDragging = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault(); // Evita el comportamiento predeterminado del navegador
@@ -179,9 +200,9 @@ const Categories = () => {
             "
           >
             {/* Botón izquierdo */}
-            {isScrolling && barraRef.current && barraRef.current.scrollLeft > 0 && (
+            {showLeftArrow && (
               <div className="boton-izquierdo absolute top-0 left-0 h-full w-12 flex items-center bg-gradient-to-r from-white to-transparent">
-                <BtnCirculo icon={SlArrowLeft} onClick={() => onArrowClick('left')} />
+                <BtnCirculo icon={SlArrowLeft} onClick={() => smoothScroll(-180)} />
               </div>
             )}
 
@@ -204,9 +225,9 @@ const Categories = () => {
             </div>
             
             {/* Botón derecho */}
-            { (barraRef.current && barraRef.current.scrollLeft < (barraRef.current.scrollWidth - barraRef.current.clientWidth - 1) || irDerecha)  && (
+            { showRightArrow  && (
               <div className="boton-derecho flex items-center absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-white to-transparent">
-                <BtnCirculo icon={SlArrowRight} onClick={() => onArrowClick('right')} />
+                <BtnCirculo icon={SlArrowRight} onClick={() => smoothScroll(180)} />
               </div>
             )}
           </div>

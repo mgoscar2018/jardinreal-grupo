@@ -5,8 +5,6 @@ import { IconType } from "react-icons";
 interface BtnCirculoProps {
   icon: IconType;
   onClick: () => void;
-  className?: string; // Asegúrate de que esta línea esté presente
-  style?: React.CSSProperties; // Añade esta línea para permitir estilos en línea
 }
 
 
