@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { format } from 'date-fns';
+import { format } from 'date-fns'; //
 
 import useCountries from "@/app/hooks/useCountries";
 
@@ -72,6 +72,13 @@ const ListingCard: React.FC<ListingCardProps> = ({
     return `${format(start, 'PP')} - ${format(end, 'PP')}`;
   }, [reservation]);
 
+  const formatPrice = (price: number) => {
+    return Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(price);
+  };
+
   return (
     <div 
       onClick={() => router.push(`/listings/${data.id}`)} 
@@ -119,7 +126,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         </div>
         <div className="flex flex-row items-center gap-1">
           <div className="font-semibold">
-            $ {price}
+            {formatPrice(price)}
           </div>
           {!reservation && (
             <div className="font-light">noche</div>

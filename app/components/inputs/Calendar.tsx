@@ -6,6 +6,8 @@ import {
   RangeKeyDict
 } from 'react-date-range';
 
+import { es } from 'date-fns/locale';
+
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
@@ -29,6 +31,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
       direction="vertical"
       showDateDisplay={false}
       minDate={new Date()}
+      locale={es}
       disabledDates={disabledDates}
     />
    );

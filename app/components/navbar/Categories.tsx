@@ -6,7 +6,7 @@ import { SlArrowRight } from "react-icons/sl";
 import BtnCirculo from "../BtnCirculo";
 
 import React, { useRef, useState, useEffect } from 'react';
-import useScroll from '@/app/hooks//useScroll'; // Importamos el hook useScroll
+//import useScroll from '@/app/hooks//useScroll'; // Importamos el hook useScroll
 //import { toast } from 'react-hot-toast';
 
 import { usePathname, useSearchParams } from "next/navigation";
@@ -116,12 +116,16 @@ const Categories = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
- 
-
+  
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
-  const updateArrowVisibility = () => {
+  const params = useSearchParams();
+  const category = params?.get("category");
+  const pathname = usePathname();
+  const isMainPage = pathname === "/";
+
+  const updateArrowVisibility = () => {    
     const { current: barra } = barraRef;
     if (barra) {
       const maxScrollLeft = barra.scrollWidth - barra.clientWidth - 1;
@@ -147,6 +151,7 @@ const Categories = () => {
 
   // Agrega el evento de escucha para el scroll
 useEffect(() => {
+  console.log('useEffect');
   const { current: barra } = barraRef;
   if (barra) {
     const handleScroll = () => {
@@ -157,7 +162,7 @@ useEffect(() => {
     updateArrowVisibility();
     return () => barra.removeEventListener('scroll', handleScroll);
   }
-}, []);  
+}, [isMainPage]);  
  
   const startDragging = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault(); // Evita el comportamiento predeterminado del navegador
@@ -170,17 +175,12 @@ useEffect(() => {
     if (!isDragging || !barraRef.current) return;
     const x = e.pageX - (barraRef.current.offsetLeft ?? 0);
     const walk = (x - startX) * 2; // Increase scroll speed
-    barraRef.current.scrollLeft = scrollLeft - walk;
+    barraRef.current.scrollLeft = scrollLeft - walk;    
   };
 
   const stopDragging = () => {
-    setIsDragging(false);
+    setIsDragging(false);    
   };
-
-  const params = useSearchParams();
-  const category = params?.get("category");
-  const pathname = usePathname();
-  const isMainPage = pathname === "/";
 
   if (!isMainPage) {
     return null;
